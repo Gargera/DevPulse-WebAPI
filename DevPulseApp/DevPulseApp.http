@@ -1,0 +1,6 @@
+@DevPulseApp_HostAddress = http://localhost:5028
+
+GET {{DevPulseApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
