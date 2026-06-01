@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
-    internal class Category
+    public class Category : BaseEntity<int>
     {
+        public string Name { get; set; } = null!;
+
+        public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

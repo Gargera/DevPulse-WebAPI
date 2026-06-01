@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
-    internal class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
+        public string FirstName { get; set; } = null!;
+
+        public string LastName { get; set; } = null!;
+
+        public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }
