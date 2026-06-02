@@ -1,7 +1,7 @@
 ﻿namespace Domain.Entities
 {
-    public abstract class BaseEntity<TKey>
+    public class BaseEntity<TKey> where TKey : notnull
     {
-        public TKey Id { get; set; }
+        public TKey Id { get; set; } = default!;
     }
 }

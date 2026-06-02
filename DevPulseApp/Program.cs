@@ -20,6 +20,7 @@ namespace DevPulseApp
             // Add services to the container.
             builder.Services.AddControllers();
 
+            builder.Services.AddDataProtection();
             builder.Services.AddIdentityCore<ApplicationUser>(options =>
             {
                 options.Password.RequiredLength = 8;
