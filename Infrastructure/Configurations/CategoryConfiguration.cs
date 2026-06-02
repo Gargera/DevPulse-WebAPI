@@ -13,6 +13,9 @@ namespace Infrastructure.Configurations
             builder.Property(c => c.Name)
                 .IsRequired();
 
+            builder.HasIndex(c => c.Name)
+                .IsUnique();
+
             builder.ToTable(t => {t.HasCheckConstraint("CK_Category_Name_Length", "LEN(Name) BETWEEN 2 AND 100");});
         }
     }
