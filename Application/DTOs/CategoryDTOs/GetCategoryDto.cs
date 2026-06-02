@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.BlogDTOs;
 
 namespace Application.DTOs.CategoryDTOs
 {
@@ -7,5 +7,7 @@ namespace Application.DTOs.CategoryDTOs
         public int Id { get; set; }
 
         public string Name { get; set; } = null!;
+
+        public ICollection<GetBlogDto> Blogs { get; set; } = new List<GetBlogDto>();
     }
 }
