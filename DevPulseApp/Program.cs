@@ -1,3 +1,4 @@
+using DevPulseApp.Middlewares;
 using Domain.Entities;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,11 @@ namespace DevPulseApp
             // Add services to the container.
             builder.Services.AddControllers();
 
-            builder.Services.AddDataProtection();
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile(typeof(Application.Mapper.DomainProfile));
+            });
+
             builder.Services.AddIdentityCore<ApplicationUser>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -54,6 +59,8 @@ namespace DevPulseApp
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

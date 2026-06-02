@@ -2,7 +2,7 @@
 
 namespace Application.DTOs.BlogDTOs
 {
-    public class GetBlogDTO
+    public class GetBlogDto
     {
         public int Id { get; set; }
 
