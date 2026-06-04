@@ -5,8 +5,8 @@ namespace Application.Interfaces.Services
 {
     public interface IAccountService
     {
-        public Task<ResponseResult<string>> RegisterAsync(RegisterDto dto);
+        public Task<ResponseResult<string>> RegisterAsync(RegisterDto registerDto);
 
-        //public Task<ResponseResult<string>> LoginAsync(LoginDto dto);
+        public Task<ResponseResult<string>> LoginAsync(LoginDto logInDto);
     }
 }

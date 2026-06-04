@@ -1,7 +1,7 @@
-using DevPulseApp.Middlewares;
-using Infrastructure.DependencyInjection;
 using Application.DependencyInjection;
 using DevPulseApp.ExtensionMethods;
+using DevPulseApp.Middlewares;
+using Infrastructure.DependencyInjection;
 
 namespace DevPulseApp
 {
@@ -9,6 +9,11 @@ namespace DevPulseApp
     {
         public static async Task Main(string[] args)
         {
+            //var key = Convert.ToBase64String(
+            //    RandomNumberGenerator.GetBytes(64)
+            //);
+            //Console.WriteLine(key);
+
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddInfrastructure(builder.Configuration);

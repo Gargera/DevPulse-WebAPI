@@ -1,6 +1,7 @@
-﻿using Domain.Common;
-using Application.DTOs.AccountDTOs;
+﻿using Application.DTOs.AccountDTOs;
+using Application.DTOs.JwtDTOs;
 using Application.Interfaces.Services;
+using Domain.Common;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,9 +10,11 @@ namespace Infrastructure.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public AccountService(UserManager<ApplicationUser> userManager)
+        private readonly IJwtService _jwtService;
+        public AccountService(UserManager<ApplicationUser> userManager, IJwtService jwtService)
         {
             _userManager = userManager;
+            _jwtService = jwtService;
         }
 
         public async Task<ResponseResult<string>> RegisterAsync(RegisterDto registerDto)
@@ -58,9 +61,50 @@ namespace Infrastructure.Services
             );
         }
 
-        //public async Task<ResponseResult<string>> LoginAsync(LoginDto dto)
-        //{
+        public async Task<ResponseResult<string>> LoginAsync(LoginDto logInDto)
+        {
+            var user = await _userManager.FindByNameAsync(logInDto.UserName);
 
-        //}
+            if (user == null)
+            {
+                return new ResponseResult<string>
+                (
+                    false,
+                    "Invalid email or password.",
+                    null
+                );
+            }
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, logInDto.Password);
+
+            if (!isPasswordValid)
+            {
+                if (user == null)
+                {
+                    return new ResponseResult<string>
+                    (
+                        false,
+                        "Invalid email or password.",
+                        null
+                    );
+                }
+            }
+
+
+            var jwtDto = new JwtDto
+            {
+                UserId = user.Id,
+                UserName = user.UserName!,
+                Email = user.Email!,
+                Roles = await _userManager.GetRolesAsync(user)
+            };
+
+            return new ResponseResult<string>
+            (
+                true,
+                "User Logged in successfully",
+                _jwtService.GenerateToken(jwtDto)
+            );
+        }
     }
 }

@@ -24,14 +24,14 @@ namespace DevPulseApp.Controllers
             return Created();
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(LoginDto dto)
-        //{
-        //    var result = await _accountService.LoginAsync(dto);
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto dto)
+        {
+            var result = await _accountService.LoginAsync(dto);
 
-        //    if (!result.IsSuccess) return Unauthorized(result.Message);
+            if (!result.IsSuccess) return Unauthorized(result.Message);
 
-        //    return Ok(result.Data);
-        //}
+            return Ok(result.Data);
+        }
     }
 }
