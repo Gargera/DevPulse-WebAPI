@@ -3,13 +3,12 @@
 ![.NET](https://img.shields.io/badge/.NET-9.0-blue)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Web%20API-green)
 ![Entity Framework Core](https://img.shields.io/badge/Entity%20Framework%20Core-ORM-orange)
-![License](https://img.shields.io/badge/License-MIT-blue)
 
 A modern, fully-featured blogging platform built with **Clean Architecture**, **ASP.NET Core**, and **Entity Framework Core**. DevPulse demonstrates enterprise-grade API design with authentication, authorization, and comprehensive blog management capabilities.
 
 ## Overview
 
-DevPulse is a RESTful blogging platform that enables users to create, manage, and discover blog posts. The application leverages **Clean Architecture** principles to ensure separation of concerns, maintainability, and scalability. It serves as a portfolio project showcasing modern .NET development practices and design patterns.
+DevPulse is a RESTful blogging platform that enables users to create, manage, and discover blog posts. The application leverages **Clean Architecture** principles to ensure separation of concerns, maintainability, and scalability. It is showcasing modern .NET development practices and design patterns.
 
 **Key Highlights:**
 - 🏗️ Clean Architecture with clear separation of concerns
@@ -38,7 +37,7 @@ DevPulse is a RESTful blogging platform that enables users to create, manage, an
 
 ### Category Management
 - **Browse Categories** - Public access to view all available categories
-- **Admin Management** - Admin users can create, update, and delete categories
+- **Admin Management** - Admin users can create, update, and delete categories and update, delete any blog for any user
 
 ### Data Validation & Security
 - **Input Validation** - Data Annotations for comprehensive validation rules
@@ -201,7 +200,7 @@ Content organization:
 ### Endpoint Authorization Examples
 ```csharp
 [AllowAnonymous]                      // Public endpoint
-[Authorize]                           // Authenticated users only
+[Authorize]                           // Authenticated
 [Authorize(Roles = "Admin")]          // Admin users only
 ```
 
@@ -318,8 +317,8 @@ dotnet user-secrets set "JWT:Key" "Your_JWT_Secret_Key" --project DevPulseApp
 - `GET /api/blog/category/{categoryId}` - Filter blogs by category (public)
 - `GET /api/blog/my-blogs` - Get current user's blogs (authenticated)
 - `POST /api/blog` - Create new blog (authenticated)
-- `PUT /api/blog/{id}` - Update blog (authenticated, owner only)
-- `DELETE /api/blog/{id}` - Delete blog (authenticated, owner only)
+- `PUT /api/blog/{id}` - Update blog (authenticated, owner and admins only)
+- `DELETE /api/blog/{id}` - Delete blog (authenticated, owner and admins only)
 
 ### Categories
 - `GET /api/category` - Get all categories (public)
@@ -336,4 +335,4 @@ dotnet user-secrets set "JWT:Key" "Your_JWT_Secret_Key" --project DevPulseApp
 
 ---
 
-**DevPulse** © 2024. Built as a portfolio project showcasing modern ASP.NET Core development practices and Clean Architecture principles.
+**DevPulse** © 2024. modern ASP.NET Core development practices and Clean Architecture principles.
