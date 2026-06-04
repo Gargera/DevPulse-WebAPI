@@ -1,10 +1,11 @@
-﻿using Application.Interfaces.UnitOfWork;
+﻿using Application.Interfaces.DataSeeding;
+using Application.Interfaces.UnitOfWork;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.DataSeeding
 {
-    public class DataInitializer
+    public class DataInitializer : IDataInitializer
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly RoleManager<IdentityRole> _roleManager;

@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using Application.Interfaces.DataSeeding;
+using Infrastructure.DataSeeding;
 
 namespace Infrastructure.DependencyInjection;
 
@@ -19,6 +21,7 @@ public static class InfrastructureServiceRegistration
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        services.AddScoped<IDataInitializer, DataInitializer>();
 
         services.AddIdentityCore<ApplicationUser>(options =>
         {
