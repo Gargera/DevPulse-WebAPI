@@ -59,7 +59,7 @@ namespace Application.Services
         {
             var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == createCategoryDto.Name.ToLower());
 
-            if(category != null)
+            if(category == null)
             {
                 var mappedResult = _mapper.Map<Category>(createCategoryDto);
                 await _unitOfWork.Categories.AddEntityAsync(mappedResult);
@@ -117,7 +117,7 @@ namespace Application.Services
             {
                 var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == updateCategoryDto.Name.ToLower() && c.Id != id);
 
-                if (category != null)
+                if (category == null)
                 {
                     result.Name = updateCategoryDto.Name;
 

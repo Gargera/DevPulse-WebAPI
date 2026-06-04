@@ -60,7 +60,7 @@ namespace DevPulseApp.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateBlog(CreateBlogDto blog)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
