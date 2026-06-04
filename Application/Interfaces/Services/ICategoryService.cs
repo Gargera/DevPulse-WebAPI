@@ -5,7 +5,7 @@ namespace Application.Interfaces.Services
 {
     public interface ICategoryService
     {
-        public Task<ResponseResult<List<GetCategoryDto>>> GetAllCategoriesAsync();
+        public Task<ResponseResult<List<GetCategoryWithoutBlogsDto>>> GetAllCategoriesAsync();
 
         public Task<ResponseResult<GetCategoryDto>> GetCategoryByIdAsync(int id);
 

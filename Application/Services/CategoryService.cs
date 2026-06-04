@@ -17,12 +17,12 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponseResult<List<GetCategoryDto>>> GetAllCategoriesAsync()
+        public async Task<ResponseResult<List<GetCategoryWithoutBlogsDto>>> GetAllCategoriesAsync()
         {
-            var result = await _unitOfWork.Categories.GetAllEntitiesAsync(null, c => c.Blogs);
-            var mappedResult = _mapper.Map<List<GetCategoryDto>>(result);
+            var result = await _unitOfWork.Categories.GetAllEntitiesAsync();
+            var mappedResult = _mapper.Map<List<GetCategoryWithoutBlogsDto>>(result);
 
-            return new ResponseResult<List<GetCategoryDto>>
+            return new ResponseResult<List<GetCategoryWithoutBlogsDto>>
             (
                 true,
                 null,

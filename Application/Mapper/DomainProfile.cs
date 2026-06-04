@@ -23,6 +23,7 @@ namespace Application.Mapper
 
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<Category, GetCategoryDto>();
+            CreateMap<Category, GetCategoryWithoutBlogsDto>();
         }
     }
 }
