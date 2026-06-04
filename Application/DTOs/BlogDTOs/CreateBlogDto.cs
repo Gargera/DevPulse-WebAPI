@@ -17,8 +17,6 @@ namespace Application.DTOs.BlogDTOs
 
         [Required]
         [StringLength(100, MinimumLength = 2)]
-        public string CategoryName { get; set; }
-
-        public string UserId { get; set; } = null!;
+        public string CategoryName { get; set; } = string.Empty!;
     }
 }

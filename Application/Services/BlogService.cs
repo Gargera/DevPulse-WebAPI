@@ -93,7 +93,7 @@ namespace Application.Services
             );
         }
 
-        public async Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto)
+        public async Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto, string userId)
         {
             var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == createBlogDto.CategoryName);
 
@@ -110,6 +110,7 @@ namespace Application.Services
             {
                 var mappedResult = _mapper.Map<Blog>(createBlogDto);
                 mappedResult.CategoryId = category.Id;
+                mappedResult.UserId = userId;
 
                 await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
                 await _unitOfWork.SaveChangesAsync();
@@ -123,11 +124,11 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<int>> DeleteBlogAsync(int id)
+        public async Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
 
-            if (result != null)
+            if (result != null && result.UserId == userId)
             {
                 await _unitOfWork.Blogs.DeleteEntityAsync(id);
                 await _unitOfWork.SaveChangesAsync();
@@ -150,10 +151,10 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto)
+        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
-            if (result != null)
+            if (result != null && userId == result.UserId)
             {
                 var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == updateBlogDto.CategoryName);
                 if (category != null)

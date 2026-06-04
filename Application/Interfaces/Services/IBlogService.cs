@@ -9,11 +9,11 @@ namespace Application.Interfaces.Services
 
         public Task<ResponseResult<GetBlogDto>> GetBlogByIdAsync(int id);
 
-        public Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto);
+        public Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto, string userId);
 
-        public Task<ResponseResult<int>> DeleteBlogAsync(int id);
+        public Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId);
 
-        public Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto);
+        public Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId);
 
         public Task<ResponseResult<List<GetBlogDto>>> GetBlogsByCategoryIdAsync(int categoryId);
 
