@@ -66,18 +66,13 @@ namespace Infrastructure.DataSeeding
             {
                 admin = new ApplicationUser
                 {
-                    UserName = adminEmail,
+                    UserName = "EsraaTaha",
                     Email = adminEmail,
                     FirstName = "Esraa",
                     LastName = "Taha"
                 };
 
                 var res = await _userManager.CreateAsync(admin, "MeawMeaw309");
-
-                if (!res.Succeeded)
-                {
-                    throw new Exception($"Failed to create admin user: {string.Join(", ", res.Errors.Select(e => e.Description))}");
-                }
             }
 
             if (!await _userManager.IsInRoleAsync(admin, "Admin"))

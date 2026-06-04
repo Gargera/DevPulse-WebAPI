@@ -79,15 +79,12 @@ namespace Infrastructure.Services
 
             if (!isPasswordValid)
             {
-                if (user == null)
-                {
-                    return new ResponseResult<string>
-                    (
-                        false,
-                        "Invalid email or password.",
-                        null
-                    );
-                }
+                return new ResponseResult<string>
+                (
+                    false,
+                    "Invalid email or password.",
+                    null
+                );
             }
 
 

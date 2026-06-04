@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Application.Interfaces.DataSeeding;
 using Infrastructure.DataSeeding;
+using Application.Interfaces.Services;
+using Infrastructure.Services;
 
 namespace Infrastructure.DependencyInjection;
 
@@ -22,6 +24,8 @@ public static class InfrastructureServiceRegistration
 
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped<IDataInitializer, DataInitializer>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IJwtService, JwtService>();
 
         services.AddIdentityCore<ApplicationUser>(options =>
         {
