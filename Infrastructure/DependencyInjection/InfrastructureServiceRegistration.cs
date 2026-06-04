@@ -1,10 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces.UnitOfWork;
+using Domain.Entities;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace Infrastructure.DependencyInjection;
 
@@ -31,6 +34,39 @@ public static class InfrastructureServiceRegistration
         })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        var key = configuration["JWT:Key"]!;
+
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+
+            options.DefaultChallengeScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters =
+                new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = secretKey,
+
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+        });
+
+        services.AddAuthorization();
 
         return services;
     }
