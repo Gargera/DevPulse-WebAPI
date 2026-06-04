@@ -10,7 +10,7 @@ namespace Application.DTOs.BlogDTOs
 
         public string Content { get; set; } = null!;
 
-        public string? ImagePath { get; set; }
+        public string? ImageUrl { get; set; }
 
         public string CategoryName { get; set; } = null!;
 

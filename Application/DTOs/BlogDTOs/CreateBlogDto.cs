@@ -13,12 +13,11 @@ namespace Application.DTOs.BlogDTOs
         public string Content { get; set; } = null!;
 
         [StringLength(500)]
-        public string? ImagePath { get; set; }
+        public string? ImageUrl { get; set; }
 
         [Range(1, int.MaxValue)]
         public int CategoryId { get; set; }
 
-        [Required]
         public string UserId { get; set; } = null!;
     }
 }

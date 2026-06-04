@@ -17,7 +17,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponseResult<List<GetBlogDto>>> GetAllBlogsDtosAsync()
+        public async Task<ResponseResult<List<GetBlogDto>>> GetAllBlogsAsync()
         {
             var result = await _unitOfWork.Blogs.GetAllEntitiesAsync(null, b => b.User, b => b.Category);
             var mappedResult = _mapper.Map<List<GetBlogDto>>(result);
@@ -30,12 +30,62 @@ namespace Application.Services
             );
         }
 
-        public async Task<ResponseResult<GetBlogDto>> GetBlogDtoByIdAsync(int id)
+        public async Task<ResponseResult<GetBlogDto>> GetBlogByIdAsync(int id)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id, b => b.User, b => b.Category);
-            var mappedResult = _mapper.Map<GetBlogDto>(result);
+            
+            if(result == null)
+            {
+                return new ResponseResult<GetBlogDto>
+                (
+                    false,
+                    "Blog not found.",
+                    null
+                );
+            }
+            else
+            {
+                var mappedResult = _mapper.Map<GetBlogDto>(result);
+                return new ResponseResult<GetBlogDto>
+                (
+                    true,
+                    null,
+                    mappedResult
+                );
+            }
+        }
 
-            return new ResponseResult<GetBlogDto>
+        public async Task<ResponseResult<List<GetBlogDto>>> GetBlogsByCategoryIdAsync(int categoryId)
+        {
+            var cat = await _unitOfWork.Categories.GetEntityByIdAsync(categoryId);
+
+            if (cat == null)
+            {
+                return new ResponseResult<List<GetBlogDto>>
+                (
+                    false,
+                    "Category not found.",
+                    null
+                );
+            }
+            else
+            {
+                var result = await _unitOfWork.Blogs.GetAllEntitiesAsync(b => b.CategoryId == categoryId, b => b.User, b => b.Category);
+                var mappedResult = _mapper.Map<List<GetBlogDto>>(result);
+                return new ResponseResult<List<GetBlogDto>>
+                (
+                    true,
+                    null,
+                    mappedResult
+                );
+            }
+        }
+
+        public async Task<ResponseResult<List<GetBlogDto>>> GetBlogsByUserIdAsync(string userId)
+        {
+            var result = await _unitOfWork.Blogs.GetAllEntitiesAsync(b => b.UserId == userId, b => b.User, b => b.Category);
+            var mappedResult = _mapper.Map<List<GetBlogDto>>(result);
+            return new ResponseResult<List<GetBlogDto>>
             (
                 true,
                 null,
@@ -43,21 +93,35 @@ namespace Application.Services
             );
         }
 
-        public async Task<ResponseResult<CreateBlogDto>> CreateBlogDtoAsync(CreateBlogDto createBlogDto)
+        public async Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto)
         {
-            var mappedResult = _mapper.Map<Blog>(createBlogDto);
-            await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
-            await _unitOfWork.SaveChangesAsync();
+            var category = await _unitOfWork.Categories.GetEntityByIdAsync(createBlogDto.CategoryId);
 
-            return new ResponseResult<CreateBlogDto>
-            (
-                true,
-                null,
-                createBlogDto
-            );
+            if (category == null)
+            {
+                return new ResponseResult<CreateBlogDto>
+                (
+                    false,
+                    "Category not found.",
+                    createBlogDto
+                );
+            }
+            else
+            {
+                var mappedResult = _mapper.Map<Blog>(createBlogDto);
+                await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
+                await _unitOfWork.SaveChangesAsync();
+
+                return new ResponseResult<CreateBlogDto>
+                (
+                    true,
+                    null,
+                    createBlogDto
+                );
+            }
         }
 
-        public async Task<ResponseResult<int>> DeleteBlogDtoAsync(int id)
+        public async Task<ResponseResult<int>> DeleteBlogAsync(int id)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
 
@@ -84,35 +148,37 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogDtoAsync(int id, UpdateBlogDto updateBlogDto)
+        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
             if (result != null)
             {
-                result.Title = updateBlogDto.Title;
-                result.Content = updateBlogDto.Content;
-                result.CategoryId = updateBlogDto.CategoryId;
-                result.ImagePath = updateBlogDto.ImagePath;
+                var category = await _unitOfWork.Categories.GetEntityByIdAsync(updateBlogDto.CategoryId);
+                if (category != null)
+                {
+                    result.Title = updateBlogDto.Title;
+                    result.Content = updateBlogDto.Content;
+                    result.CategoryId = updateBlogDto.CategoryId;
+                    result.ImageUrl = updateBlogDto.ImageUrl;
 
-                _unitOfWork.Blogs.UpdateEntity(result);
-                await _unitOfWork.SaveChangesAsync();
+                    _unitOfWork.Blogs.UpdateEntity(result);
+                    await _unitOfWork.SaveChangesAsync();
 
-                return new ResponseResult<UpdateBlogDto>
-                (
-                    true,
-                    null,
-                    updateBlogDto
-                );
+                    return new ResponseResult<UpdateBlogDto>
+                    (
+                        true,
+                        null,
+                        updateBlogDto
+                    );
+                }
             }
-            else
-            {
-                return new ResponseResult<UpdateBlogDto>
-                (
-                    false,
-                    "Blog not found.",
-                    updateBlogDto
-                );
-            }
+
+            return new ResponseResult<UpdateBlogDto>
+            (
+                false,
+                "Bad request.",
+                updateBlogDto
+            );
         }
     }
 }
