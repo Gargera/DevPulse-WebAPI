@@ -17,7 +17,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponseResult<List<GetCategoryDto>>> GetAllCategoriesDtosAsync()
+        public async Task<ResponseResult<List<GetCategoryDto>>> GetAllCategoriesAsync()
         {
             var result = await _unitOfWork.Categories.GetAllEntitiesAsync(null, c => c.Blogs);
             var mappedResult = _mapper.Map<List<GetCategoryDto>>(result);
@@ -30,20 +30,32 @@ namespace Application.Services
             );
         }
 
-        public async Task<ResponseResult<GetCategoryDto>> GetCategoryDtoByIdAsync(int id)
+        public async Task<ResponseResult<GetCategoryDto>> GetCategoryByIdAsync(int id)
         {
             var result = await _unitOfWork.Categories.GetEntityByIdAsync(id, c => c.Blogs);
-            var mappedResult = _mapper.Map<GetCategoryDto>(result);
-
-            return new ResponseResult<GetCategoryDto>
-            (
-                true,
-                null,
-                mappedResult
-            );
+            
+            if(result != null)
+            {
+                var mappedResult = _mapper.Map<GetCategoryDto>(result);
+                return new ResponseResult<GetCategoryDto>
+                (
+                    true,
+                    null,
+                    mappedResult
+                );
+            }
+            else
+            {
+                return new ResponseResult<GetCategoryDto>
+                (
+                    false,
+                    "Category not found.",
+                    null
+                );
+            }
         }
 
-        public async Task<ResponseResult<CreateCategoryDto>> CreateCategoryDtoAsync(CreateCategoryDto createCategoryDto)
+        public async Task<ResponseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
             var mappedResult = _mapper.Map<Category>(createCategoryDto);
             await _unitOfWork.Categories.AddEntityAsync(mappedResult);
@@ -57,7 +69,7 @@ namespace Application.Services
             );
         }
 
-        public async Task<ResponseResult<int>> DeleteCategoryDtoAsync(int id)
+        public async Task<ResponseResult<int>> DeleteCategoryAsync(int id)
         {
             var result = await _unitOfWork.Categories.GetEntityByIdAsync(id);
 
@@ -84,7 +96,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<UpdateCategoryDto>> UpdateCategoryDtoAsync(int id, UpdateCategoryDto updateCategoryDto)
+        public async Task<ResponseResult<UpdateCategoryDto>> UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto)
         {
             var result = await _unitOfWork.Categories.GetEntityByIdAsync(id);
             if (result != null)
