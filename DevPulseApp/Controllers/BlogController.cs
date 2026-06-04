@@ -80,7 +80,9 @@ namespace DevPulseApp.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
 
-            var response = await _blogService.UpdateBlogAsync(id, blog, userId);
+            var isAdmin = User.IsInRole("Admin");
+
+            var response = await _blogService.UpdateBlogAsync(id, blog, userId, isAdmin);
             
             if(!response.IsSuccess) return BadRequest(response.Message);
             
@@ -94,7 +96,9 @@ namespace DevPulseApp.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
 
-            var response = await _blogService.DeleteBlogAsync(id, userId);
+            var isAdmin = User.IsInRole("Admin");
+
+            var response = await _blogService.DeleteBlogAsync(id, userId, isAdmin);
             
             if (!response.IsSuccess) return NotFound(response.Message);
           

@@ -124,11 +124,11 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId)
+        public async Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId, bool isAdmin)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
 
-            if (result != null && result.UserId == userId)
+            if (result != null && (userId == result.UserId || isAdmin))
             {
                 await _unitOfWork.Blogs.DeleteEntityAsync(id);
                 await _unitOfWork.SaveChangesAsync();
@@ -151,10 +151,10 @@ namespace Application.Services
             }
         }
 
-        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId)
+        public async Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId, bool isAdmin)
         {
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
-            if (result != null && userId == result.UserId)
+            if (result != null && (userId == result.UserId || isAdmin))
             {
                 var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == updateBlogDto.CategoryName);
                 if (category != null)

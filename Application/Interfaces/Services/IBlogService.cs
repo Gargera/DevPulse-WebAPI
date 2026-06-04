@@ -11,9 +11,9 @@ namespace Application.Interfaces.Services
 
         public Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto, string userId);
 
-        public Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId);
+        public Task<ResponseResult<int>> DeleteBlogAsync(int id, string userId, bool isAdmin);
 
-        public Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId);
+        public Task<ResponseResult<UpdateBlogDto>> UpdateBlogAsync(int id, UpdateBlogDto updateBlogDto, string userId, bool isAdmin);
 
         public Task<ResponseResult<List<GetBlogDto>>> GetBlogsByCategoryIdAsync(int categoryId);
 
