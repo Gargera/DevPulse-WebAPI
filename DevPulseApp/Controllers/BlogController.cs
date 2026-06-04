@@ -67,7 +67,7 @@ namespace DevPulseApp.Controllers
 
             var response = await _blogService.CreateBlogAsync(blog);
 
-            if(!response.IsSuccess) return BadRequest(response.Data);
+            if(!response.IsSuccess) return BadRequest(response.Message);
             
             return Created();
         }
@@ -78,7 +78,7 @@ namespace DevPulseApp.Controllers
         {
             var response = await _blogService.UpdateBlogAsync(id, blog);
             
-            if(!response.IsSuccess) return BadRequest(response.Data);
+            if(!response.IsSuccess) return BadRequest(response.Message);
             
             return NoContent();
         }

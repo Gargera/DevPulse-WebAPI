@@ -15,7 +15,8 @@ namespace Application.DTOs.BlogDTOs
         [StringLength(500)]
         public string? ImageUrl { get; set; }
 
-        [Range(1, int.MaxValue)]
-        public int CategoryId { get; set; }
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
+        public string CategoryName { get; set; }
     }
 }

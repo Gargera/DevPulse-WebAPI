@@ -57,16 +57,30 @@ namespace Application.Services
 
         public async Task<ResponseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
-            var mappedResult = _mapper.Map<Category>(createCategoryDto);
-            await _unitOfWork.Categories.AddEntityAsync(mappedResult);
-            await _unitOfWork.SaveChangesAsync();
+            var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == createCategoryDto.Name);
 
-            return new ResponseResult<CreateCategoryDto>
-            (
-                true,
-                null,
-                createCategoryDto
-            );
+            if(category != null)
+            {
+                var mappedResult = _mapper.Map<Category>(createCategoryDto);
+                await _unitOfWork.Categories.AddEntityAsync(mappedResult);
+                await _unitOfWork.SaveChangesAsync();
+
+                return new ResponseResult<CreateCategoryDto>
+                (
+                    true,
+                    null,
+                    createCategoryDto
+                );
+            }
+            else
+            {
+                return new ResponseResult<CreateCategoryDto>
+                (
+                    false,
+                    "Category with the same name already exists.",
+                    createCategoryDto
+                );
+            }
         }
 
         public async Task<ResponseResult<int>> DeleteCategoryAsync(int id)
@@ -101,17 +115,31 @@ namespace Application.Services
             var result = await _unitOfWork.Categories.GetEntityByIdAsync(id);
             if (result != null)
             {
-                result.Name = updateCategoryDto.Name;
+                var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == updateCategoryDto.Name && c.Id != id);
 
-                _unitOfWork.Categories.UpdateEntity(result);
-                await _unitOfWork.SaveChangesAsync();
+                if (category != null)
+                {
+                    result.Name = updateCategoryDto.Name;
 
-                return new ResponseResult<UpdateCategoryDto>
-                (
-                    true,
-                    null,
-                    updateCategoryDto
-                );
+                    _unitOfWork.Categories.UpdateEntity(result);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return new ResponseResult<UpdateCategoryDto>
+                    (
+                        true,
+                        null,
+                        updateCategoryDto
+                    );
+                }
+                else
+                {
+                    return new ResponseResult<UpdateCategoryDto>
+                    (
+                        false,
+                        "Category with the same name already exists.",
+                        updateCategoryDto
+                    );
+                }
             }
             else
             {

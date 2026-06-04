@@ -14,6 +14,8 @@ namespace Application.Interfaces.Repositories
 
         public Task DeleteEntityAsync(int id);
 
+        public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
         public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate);
 
         public Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);

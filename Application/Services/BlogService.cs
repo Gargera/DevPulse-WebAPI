@@ -95,7 +95,7 @@ namespace Application.Services
 
         public async Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto)
         {
-            var category = await _unitOfWork.Categories.GetEntityByIdAsync(createBlogDto.CategoryId);
+            var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == createBlogDto.CategoryName);
 
             if (category == null)
             {
@@ -109,6 +109,8 @@ namespace Application.Services
             else
             {
                 var mappedResult = _mapper.Map<Blog>(createBlogDto);
+                mappedResult.CategoryId = category.Id;
+
                 await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -153,12 +155,12 @@ namespace Application.Services
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
             if (result != null)
             {
-                var category = await _unitOfWork.Categories.GetEntityByIdAsync(updateBlogDto.CategoryId);
+                var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == updateBlogDto.CategoryName);
                 if (category != null)
                 {
                     result.Title = updateBlogDto.Title;
                     result.Content = updateBlogDto.Content;
-                    result.CategoryId = updateBlogDto.CategoryId;
+                    result.CategoryId = category.Id;
                     result.ImageUrl = updateBlogDto.ImageUrl;
 
                     _unitOfWork.Blogs.UpdateEntity(result);

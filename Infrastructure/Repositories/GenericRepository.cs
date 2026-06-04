@@ -95,6 +95,18 @@ namespace Infrastructure.Repositories
             }
         }
 
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+           try
+           {
+                return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+           }
+           catch
+           {
+               throw;
+           }
+        }
+
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
         {
             try

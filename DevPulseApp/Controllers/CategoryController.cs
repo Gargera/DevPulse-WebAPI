@@ -42,7 +42,7 @@ namespace DevPulseApp.Controllers
         {
             var response = await _categoryService.CreateCategoryAsync(category);
 
-            if (!response.IsSuccess) return BadRequest(response.Data);
+            if (!response.IsSuccess) return BadRequest(response.Message);
 
             return Created();
         }
@@ -53,7 +53,7 @@ namespace DevPulseApp.Controllers
         {
             var response = await _categoryService.UpdateCategoryAsync(id, category);
 
-            if (!response.IsSuccess) return BadRequest(response.Data);
+            if (!response.IsSuccess) return BadRequest(response.Message);
 
             return NoContent();
         }
