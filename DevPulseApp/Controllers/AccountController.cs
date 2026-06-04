@@ -7,5 +7,9 @@ namespace DevPulseApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        public AccountController()
+        {
+            
+        }
     }
 }
