@@ -8,11 +8,13 @@ namespace Infrastructure.DataSeeding
     public class DataInitializer : IDataInitializer
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public DataInitializer(IUnitOfWork unitOfWork, RoleManager<IdentityRole> roleManager)
+        public DataInitializer(IUnitOfWork unitOfWork, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public async Task InitializeIdentityDataAsync()
@@ -55,6 +57,32 @@ namespace Infrastructure.DataSeeding
             {
                 var adminRole = new IdentityRole("Admin");
                 await _roleManager.CreateAsync(adminRole);
+            }
+
+            var adminEmail = "esraataha@gmail.com";
+
+            var admin = await _userManager.FindByEmailAsync(adminEmail);
+            if (admin is null)
+            {
+                admin = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    FirstName = "Esraa",
+                    LastName = "Taha"
+                };
+
+                var res = await _userManager.CreateAsync(admin, "MeawMeaw309");
+
+                if (!res.Succeeded)
+                {
+                    throw new Exception($"Failed to create admin user: {string.Join(", ", res.Errors.Select(e => e.Description))}");
+                }
+            }
+
+            if (!await _userManager.IsInRoleAsync(admin, "Admin"))
+            {
+                await _userManager.AddToRoleAsync(admin, "Admin");
             }
         }
     }

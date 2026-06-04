@@ -25,7 +25,7 @@ namespace DevPulseApp.Controllers
             return Ok(response.Data);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
@@ -36,7 +36,7 @@ namespace DevPulseApp.Controllers
             return Ok(response.Data);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto category)
         {
@@ -47,7 +47,7 @@ namespace DevPulseApp.Controllers
             return Created();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto category)
         {
@@ -58,7 +58,7 @@ namespace DevPulseApp.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
