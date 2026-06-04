@@ -1,4 +1,4 @@
-﻿using Application.Common;
+﻿using Domain.Common;
 using Application.DTOs.CategoryDTOs;
 
 namespace Application.Interfaces.Services

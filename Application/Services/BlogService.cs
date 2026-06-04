@@ -1,4 +1,4 @@
-﻿using Application.Common;
+﻿using Domain.Common;
 using Application.DTOs.BlogDTOs;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;

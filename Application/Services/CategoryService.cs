@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Application.Common;
+using Domain.Common;
 using Application.DTOs.CategoryDTOs;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
