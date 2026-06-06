@@ -126,6 +126,7 @@ DevPulse/
 │   │   ├── CategoryDTOs/
 │   │   │   ├── CreateCategoryDto.cs
 │   │   │   ├── GetCategoryDto.cs
+|   |   |   ├── GetCategoryWithoutBlogsDto.cs
 │   │   │   └── UpdateCategoryDto.cs
 │   │   └── JwtDTOs/
 │   │       └── JwtDto.cs
