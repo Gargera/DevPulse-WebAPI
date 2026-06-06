@@ -28,7 +28,22 @@ namespace DevPulseApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed((host) => true);
+                });
+            });
+
             var app = builder.Build();
+
+            app.UseCors("CorsPolicy");
 
             await app.SeedDataAsync();
             await app.ApplyPendingMigrationsAsync();
