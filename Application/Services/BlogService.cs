@@ -95,6 +95,7 @@ namespace Application.Services
 
         public async Task<ResponseResult<CreateBlogDto>> CreateBlogAsync(CreateBlogDto createBlogDto, string userId)
         {
+            createBlogDto.CategoryName = createBlogDto.CategoryName.Trim();
             var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == createBlogDto.CategoryName);
 
             if (category == null)
@@ -156,6 +157,7 @@ namespace Application.Services
             var result = await _unitOfWork.Blogs.GetEntityByIdAsync(id);
             if (result != null && (userId == result.UserId || isAdmin))
             {
+                updateBlogDto.CategoryName = updateBlogDto.CategoryName.Trim();
                 var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == updateBlogDto.CategoryName);
                 if (category != null)
                 {
