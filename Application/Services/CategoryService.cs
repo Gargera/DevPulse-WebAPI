@@ -57,6 +57,7 @@ namespace Application.Services
 
         public async Task<ResponseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
         {
+            createCategoryDto.Name = createCategoryDto.Name.Trim();
             var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == createCategoryDto.Name.ToLower());
 
             if(category == null)
@@ -115,6 +116,7 @@ namespace Application.Services
             var result = await _unitOfWork.Categories.GetEntityByIdAsync(id);
             if (result != null)
             {
+                updateCategoryDto.Name = updateCategoryDto.Name.Trim();
                 var category = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == updateCategoryDto.Name.ToLower() && c.Id != id);
 
                 if (category == null)

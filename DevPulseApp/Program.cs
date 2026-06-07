@@ -43,6 +43,8 @@ namespace DevPulseApp
 
             var app = builder.Build();
 
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
             app.UseCors("CorsPolicy");
 
             await app.SeedDataAsync();
@@ -57,8 +59,6 @@ namespace DevPulseApp
             }
 
             app.UseHttpsRedirection();
-
-            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

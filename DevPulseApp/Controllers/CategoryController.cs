@@ -37,7 +37,7 @@ namespace DevPulseApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto category)
         {
             var response = await _categoryService.CreateCategoryAsync(category);

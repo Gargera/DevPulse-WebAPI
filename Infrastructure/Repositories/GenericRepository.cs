@@ -17,124 +17,68 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync(Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes)
         {
-            try
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            if (predicate is not null)
             {
-                IQueryable<TEntity> query = _dbContext.Set<TEntity>();
-
-                if (predicate is not null)
-                {
-                    query = query.Where(predicate);
-                }
-
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-
-                return await query.ToListAsync();
+                query = query.Where(predicate);
             }
-            catch (Exception)
+
+            foreach (var include in includes)
             {
-                throw;
+                query = query.Include(include);
             }
+
+            return await query.ToListAsync();
         }
 
         public async Task<TEntity?> GetEntityByIdAsync(int id, params Expression<Func<TEntity, object>>[] includes)
         {
-            try
-            {
-                IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
 
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-
-                return await query.FirstOrDefaultAsync(e => e.Id == id);
-            }
-            catch (Exception)
+            foreach (var include in includes)
             {
-                throw;
+                query = query.Include(include);
             }
+
+            return await query.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task AddEntityAsync(TEntity entity)
         {
-            try
-            {
-                await _dbContext.Set<TEntity>().AddAsync(entity);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Set<TEntity>().AddAsync(entity);
         }
 
         public void UpdateEntity(TEntity entity)
         {
-            try
-            {
-                _dbContext.Set<TEntity>().Update(entity);
-            }
-            catch
-            {
-                throw;
-            }
+            _dbContext.Set<TEntity>().Update(entity);
         }
 
         public async Task DeleteEntityAsync(int id)
         {
-            try
-            {
-                var entity = await _dbContext.Set<TEntity>().FindAsync(id);
-                _dbContext.Set<TEntity>().Remove(entity!);
-            }
-            catch
-            {
-                throw;
-            }
+            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+            _dbContext.Set<TEntity>().Remove(entity!);
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-           try
-           {
-                return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
-           }
-           catch
-           {
-               throw;
-           }
+           return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            try
-            {
-                return await _dbContext.Set<TEntity>().AnyAsync(predicate);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _dbContext.Set<TEntity>().AnyAsync(predicate);
         }
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null)
         {
-            try
+            if (predicate is not null)
             {
-                if (predicate is not null)
-                {
-                    return await _dbContext.Set<TEntity>().CountAsync(predicate);
-                }
-                else
-                {
-                    return await _dbContext.Set<TEntity>().CountAsync();
-                }
+                return await _dbContext.Set<TEntity>().CountAsync(predicate);
             }
-            catch
+            else
             {
-                throw;
+                return await _dbContext.Set<TEntity>().CountAsync();
             }
         }
     }
