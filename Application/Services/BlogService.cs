@@ -11,10 +11,12 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IFileStorageService _fileStorageService;
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task<ResponseResult<List<GetBlogDto>>> GetAllBlogsAsync()
@@ -112,6 +114,21 @@ namespace Application.Services
                 var mappedResult = _mapper.Map<Blog>(createBlogDto);
                 mappedResult.CategoryId = category.Id;
                 mappedResult.UserId = userId;
+                if (createBlogDto.Image != null)
+                {
+                    var res = await _fileStorageService.SaveFileAsync(createBlogDto.Image, "Blogs");
+                    if (!res.IsSuccess)
+                    {
+                        return new ResponseResult<CreateBlogDto>
+                        (
+                            res.IsSuccess,
+                            res.Message,
+                            createBlogDto
+                        );
+                    }
+
+                    mappedResult.ImageUrl = res.Data;
+                }
 
                 await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
                 await _unitOfWork.SaveChangesAsync();
@@ -131,6 +148,7 @@ namespace Application.Services
 
             if (result != null && (userId == result.UserId || isAdmin))
             {
+                if (result.ImageUrl != null) _fileStorageService.DeleteFile(result.ImageUrl);
                 await _unitOfWork.Blogs.DeleteEntityAsync(id);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -164,7 +182,22 @@ namespace Application.Services
                     result.Title = updateBlogDto.Title;
                     result.Content = updateBlogDto.Content;
                     result.CategoryId = category.Id;
-                    result.ImageUrl = updateBlogDto.ImageUrl;
+                    if (updateBlogDto.Image != null)
+                    {
+                        if (result.ImageUrl != null) _fileStorageService.DeleteFile(result.ImageUrl);
+                        var res = await _fileStorageService.SaveFileAsync(updateBlogDto.Image, "Blogs");
+                        if (!res.IsSuccess)
+                        {
+                            return new ResponseResult<UpdateBlogDto>
+                            (
+                                res.IsSuccess,
+                                res.Message,
+                                updateBlogDto
+                            );
+                        }
+
+                        result.ImageUrl = res.Data;
+                    }
 
                     _unitOfWork.Blogs.UpdateEntity(result);
                     await _unitOfWork.SaveChangesAsync();

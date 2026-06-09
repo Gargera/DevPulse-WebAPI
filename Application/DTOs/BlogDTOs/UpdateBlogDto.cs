@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs.BlogDTOs
 {
@@ -12,8 +13,7 @@ namespace Application.DTOs.BlogDTOs
         [StringLength(10000, MinimumLength = 20)]
         public string Content { get; set; } = null!;
 
-        [StringLength(500)]
-        public string? ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 2)]

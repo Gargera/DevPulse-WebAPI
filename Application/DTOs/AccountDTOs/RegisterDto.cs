@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs.AccountDTOs
 {
@@ -11,6 +12,8 @@ namespace Application.DTOs.AccountDTOs
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string LastName { get; set; } = string.Empty;
+
+        public IFormFile? Image { get; set; }
         
         [Required]
         [EmailAddress]

@@ -25,7 +25,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped<IDataInitializer, DataInitializer>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
 
         services.AddIdentityCore<ApplicationUser>(options =>
         {

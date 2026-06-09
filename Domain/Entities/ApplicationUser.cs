@@ -8,6 +8,8 @@ namespace Domain.Entities
 
         public string LastName { get; set; } = null!;
 
+        public string ImageUrl { get; set; } = null!;
+
         public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

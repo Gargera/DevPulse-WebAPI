@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.AccountDTOs;
+using Application.DTOs.BlogDTOs;
 using Application.DTOs.JwtDTOs;
 using Application.Interfaces.Services;
 using Domain.Common;
@@ -10,14 +11,16 @@ namespace Infrastructure.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IFileStorageService _fileStorageService;
         private readonly IJwtService _jwtService;
-        public AccountService(UserManager<ApplicationUser> userManager, IJwtService jwtService)
+        public AccountService(UserManager<ApplicationUser> userManager, IJwtService jwtService, IFileStorageService fileStorageService)
         {
             _userManager = userManager;
             _jwtService = jwtService;
+            _fileStorageService = fileStorageService;
         }
 
-        public async Task<ResponseResult<string>> RegisterAsync(RegisterDto registerDto)
+        public async Task<ResponseResult<RegisterDto>> RegisterAsync(RegisterDto registerDto)
         {
             var user = new ApplicationUser
             {
@@ -30,30 +33,46 @@ namespace Infrastructure.Services
             var existingEmail = await _userManager.FindByEmailAsync(registerDto.Email);
             if (existingEmail != null)
             {
-                return new ResponseResult<string>
+                return new ResponseResult<RegisterDto>
                 (
                     false,
                     "Email already exists",
-                    null
+                    registerDto
                 );
             }
 
             var existingUserName = await _userManager.FindByNameAsync(registerDto.UserName);
             if (existingUserName != null)
             {
-                return new ResponseResult<string>
+                return new ResponseResult<RegisterDto>
                 (
                     false,
                     "UserName already exists",
-                    null
+                    registerDto
                 );
+            }
+
+            if(registerDto.Image != null)
+            {
+                var res = await _fileStorageService.SaveFileAsync(registerDto.Image, "Users");
+                if (!res.IsSuccess)
+                {
+                    return new ResponseResult<RegisterDto>
+                    (
+                        res.IsSuccess,
+                        res.Message,
+                        registerDto
+                    );
+                }
+
+                user.ImageUrl = res.Data;
             }
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            return new ResponseResult<string>
+            return new ResponseResult<RegisterDto>
             (
                 true,
                 "User registered successfully",

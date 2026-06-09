@@ -45,6 +45,8 @@ namespace DevPulseApp
 
             app.UseMiddleware<GlobalExceptionMiddleware>();
 
+            app.UseStaticFiles();
+
             app.UseCors("CorsPolicy");
 
             await app.SeedDataAsync();
