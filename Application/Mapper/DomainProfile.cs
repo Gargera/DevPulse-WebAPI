@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Application.DTOs.BlogDTOs;
 using Application.DTOs.CategoryDTOs;
+using Application.DTOs.AccountDTOs;
 
 namespace Application.Mapper
 {
@@ -24,6 +25,8 @@ namespace Application.Mapper
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<Category, GetCategoryDto>();
             CreateMap<Category, GetCategoryWithoutBlogsDto>();
+
+            CreateMap<ApplicationUser, GetUserAdminDto>();
         }
     }
 }

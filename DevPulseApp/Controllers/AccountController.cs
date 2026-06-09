@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Services;
 using Application.DTOs.AccountDTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevPulseApp.Controllers
 {
@@ -8,10 +9,12 @@ namespace DevPulseApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IAccountService _accountService;
+        private readonly IUserProfileService _userProfileService;
+        public AccountController(IAccountService accountService, IUserProfileService userProfileService)
         {
             _accountService = accountService;
+            _userProfileService = userProfileService;
         }
 
         [HttpPost("register")]
@@ -32,6 +35,15 @@ namespace DevPulseApp.Controllers
             if (!result.IsSuccess) return Unauthorized(result.Message);
 
             return Ok(result.Data);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser(string userId, UpdateUserDto dto)
+        {
+            var res = await _userProfileService.UpdateProfileAsync(userId,dto);
+            if (!res.IsSuccess) return BadRequest(res.Message); 
+            return Ok(res.Data);
         }
     }
 }
