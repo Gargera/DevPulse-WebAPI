@@ -56,12 +56,12 @@ namespace DevPulseApp.Controllers
 
             var blogs = await _blogService.GetBlogsByUserIdAsync(userId);
 
-            return Ok(blogs);
+            return Ok(blogs.Data);
         }
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateBlog(CreateBlogDto blog)
+        public async Task<IActionResult> CreateBlog([FromForm] CreateBlogDto blog)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
@@ -75,7 +75,7 @@ namespace DevPulseApp.Controllers
 
         [Authorize]
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateBlog(int id, UpdateBlogDto blog)
+        public async Task<IActionResult> UpdateBlog(int id, [FromForm] UpdateBlogDto blog)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();

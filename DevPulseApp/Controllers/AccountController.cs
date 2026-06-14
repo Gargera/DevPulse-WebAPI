@@ -19,9 +19,9 @@ namespace DevPulseApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        public async Task<IActionResult> Register(RegisterDto user)
         {
-            var result = await _accountService.RegisterAsync(dto);
+            var result = await _accountService.RegisterAsync(user);
 
             if (!result.IsSuccess) return Conflict(result.Message);
 
@@ -29,9 +29,9 @@ namespace DevPulseApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+        public async Task<IActionResult> Login(LoginDto user)
         {
-            var result = await _accountService.LoginAsync(dto);
+            var result = await _accountService.LoginAsync(user);
 
             if (!result.IsSuccess) return BadRequest(result.Message);
 
@@ -40,12 +40,12 @@ namespace DevPulseApp.Controllers
 
         [Authorize(Roles = "User")]
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser(UpdateUserDto dto)
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto user)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
 
-            var res = await _userProfileService.UpdateProfileAsync(userId,dto);
+            var res = await _userProfileService.UpdateProfileAsync(userId,user);
             if (!res.IsSuccess) return BadRequest(res.Message); 
             
             return Ok(res.Data);
