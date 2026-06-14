@@ -30,6 +30,7 @@ namespace DevPulseApp.Controllers
             {
                 var mappedUser = _mapper.Map<GetUserAdminDto>(user);
                 mappedUser.Roles = await _userManager.GetRolesAsync(user);
+                mappedResult.Add(mappedUser);
             }
 
             return Ok(mappedResult);
