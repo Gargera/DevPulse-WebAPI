@@ -89,7 +89,7 @@ namespace Infrastructure.Services
                 return new ResponseResult<string>
                 (
                     false,
-                    "Invalid email or password.",
+                    "Invalid username or password.",
                     null
                 );
             }
@@ -101,7 +101,7 @@ namespace Infrastructure.Services
                 return new ResponseResult<string>
                 (
                     false,
-                    "Invalid email or password.",
+                    "Invalid username or password.",
                     null
                 );
             }

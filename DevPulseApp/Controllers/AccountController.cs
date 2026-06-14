@@ -33,7 +33,7 @@ namespace DevPulseApp.Controllers
         {
             var result = await _accountService.LoginAsync(dto);
 
-            if (!result.IsSuccess) return Unauthorized(result.Message);
+            if (!result.IsSuccess) return BadRequest(result.Message);
 
             return Ok(result.Data);
         }

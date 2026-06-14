@@ -2,6 +2,7 @@ using Application.DependencyInjection;
 using DevPulseApp.ExtensionMethods;
 using DevPulseApp.Middlewares;
 using Infrastructure.DependencyInjection;
+using Serilog;
 
 namespace DevPulseApp
 {
@@ -15,6 +16,12 @@ namespace DevPulseApp
             //Console.WriteLine(key);
 
             var builder = WebApplication.CreateBuilder(args);
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
 
             builder.Services.AddInfrastructure(builder.Configuration);
 

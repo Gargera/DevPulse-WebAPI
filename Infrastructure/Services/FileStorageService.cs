@@ -2,7 +2,6 @@
 using Domain.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System.Linq.Expressions;
 
 namespace Infrastructure.Services
 {
