@@ -35,7 +35,7 @@ namespace DevPulseApp.Controllers
 
             if (!result.IsSuccess) return BadRequest(result.Message);
 
-            return Ok(result.Data);
+            return Ok(new { token = result.Data });
         }
 
         [Authorize(Roles = "User")]
