@@ -53,7 +53,11 @@ namespace DevPulseApp.Controllers
         {
             var response = await _categoryService.UpdateCategoryAsync(id, category);
 
-            if (!response.IsSuccess) return BadRequest(response.Message);
+            if (!response.IsSuccess)
+            {
+                if (response.Message == "Category not found.") return NotFound(response.Message);
+                else return BadRequest(response.Message);
+            }
 
             return NoContent();
         }
