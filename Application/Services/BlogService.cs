@@ -4,6 +4,7 @@ using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services
 {
@@ -12,11 +13,13 @@ namespace Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFileStorageService _fileStorageService;
-        public BlogService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService)
+        private readonly ILogger<BlogService> _logger;
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService, ILogger<BlogService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileStorageService = fileStorageService;
+            _logger = logger;
         }
 
         public async Task<ResponseResult<List<GetBlogDto>>> GetAllBlogsAsync()
@@ -133,6 +136,7 @@ namespace Application.Services
                 await _unitOfWork.Blogs.AddEntityAsync(mappedResult);
                 await _unitOfWork.SaveChangesAsync();
 
+                _logger.LogInformation("blog created for user with id = ", mappedResult.UserId);
                 return new ResponseResult<CreateBlogDto>
                 (
                     true,
@@ -152,6 +156,7 @@ namespace Application.Services
                 await _unitOfWork.Blogs.DeleteEntityAsync(id);
                 await _unitOfWork.SaveChangesAsync();
 
+                _logger.LogInformation("blog deleted for user with id = ", userId);
                 return new ResponseResult<int>
                 (
                     true,
