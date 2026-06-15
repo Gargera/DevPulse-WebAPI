@@ -5,7 +5,7 @@ namespace Application.Interfaces.Services
 {
     public interface IUserProfileService
     {
-        public Task<ResponseResult<GetUserDto>> GetProfileAsync(string userId);
+        public Task<ResponseResult<GetProfileDto>> GetProfileAsync(string userId);
         public Task<ResponseResult<UpdateUserDto>> UpdateProfileAsync(string userId, UpdateUserDto updateUserDto);
     }
 }

@@ -17,13 +17,13 @@ namespace Infrastructure.Services
             _fileStorageService = fileStorageService;
         }
 
-        public async Task<ResponseResult<GetUserDto>> GetProfileAsync(string userId)
+        public async Task<ResponseResult<GetProfileDto>> GetProfileAsync(string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user is null)
             {
-                return new ResponseResult<GetUserDto>
+                return new ResponseResult<GetProfileDto>
                 (
                     false,
                     "User not found.",
@@ -33,19 +33,17 @@ namespace Infrastructure.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            return new ResponseResult<GetUserDto>
+            return new ResponseResult<GetProfileDto>
             (
                 true,
                 null,
-                new GetUserDto
+                new GetProfileDto
                 {
-                    UserId = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     UserName = user.UserName!,
                     Email = user.Email!,
-                    ImageUrl = user.ImageUrl,
-                    Roles = roles
+                    ImageUrl = user.ImageUrl
                 }
             );
         }

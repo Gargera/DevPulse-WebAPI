@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.AccountDTOs;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -43,12 +44,22 @@ namespace DevPulseApp.Controllers
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto user)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null) return Unauthorized();
-
+            
             var res = await _userProfileService.UpdateProfileAsync(userId,user);
             if (!res.IsSuccess) return BadRequest(res.Message); 
             
             return Ok(res.Data);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("UserProfile")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var user = await _userProfileService.GetProfileAsync(userId);
+
+            return Ok(user.Data);
         }
     }
 }
