@@ -48,8 +48,8 @@ namespace Infrastructure.Services
             return new ResponseResult<string>
             (
                 true,
-                "Image uploaded successfuly",
-                $"/Uploads/{folderName}/{uniqueFileName}"
+                "Image uploaded successfully",
+                $"/Images/{folderName}/{uniqueFileName}"
             );
         }
 
